@@ -1,6 +1,6 @@
 import React from 'react';
-import AddProfile from './AddProfile';
-import ProfileList from './ProfileList';
+import AddProfile from './Childs/AddProfile';
+import ProfileList from './Childs/ProfileList';
 
 export default function ProfilesPage(){
 
