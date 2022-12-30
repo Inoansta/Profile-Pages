@@ -56,3 +56,25 @@
 .ProfileList {
   width: 65%
 }
+
+.information {
+  margin: 25px;
+}
+
+.image {
+  width: 600px;
+  height: 300px;
+  object-fit: cover;
+}
+
+.name{
+  font-weight: bold;
+}
+
+.buttons{
+  margin: 10px;
+}
+
+.Card{
+  border: 2px gray solid;
+}
