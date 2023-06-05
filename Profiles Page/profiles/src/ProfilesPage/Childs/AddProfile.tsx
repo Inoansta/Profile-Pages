@@ -19,13 +19,13 @@ export default function AddProfile(){
         <br/>
         <br/>
     <div>
-        <ReinputField field="Profile Picture" setter={informationSetter}/>
+        <ReinputField field="Profile Picture" name="Image" setter={informationSetter}/>
         <br/>
-        <ReinputField field="Name" setter={informationSetter}/>
+        <ReinputField field="Name" type="text" name="Name" setter={informationSetter}/>
         <br/>
-        <ReinputField field="Email" setter={informationSetter}/>
+        <ReinputField field="Email" type="email" name="Eail" setter={informationSetter}/>
         <br/>
-        <ReinputField field="Phone Number" setter={informationSetter}/>
+        <ReinputField field="Phone Number" type="tel" name="Number" setter={informationSetter}/>
         <br/>
         <button onClick={()=>{
             dispatch(

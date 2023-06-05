@@ -8,26 +8,30 @@ interface IProps{
         email: string;
         number: string;
     }>>
+    type?: string;
+    name: string;
 }
 
-export default function ReinputField({field, setter}: IProps){
+export default function ReinputField({field, setter, type, name}: IProps){
 
-    return <div>
-        <label>{field}</label><br/>
-        <input onChange={e => {
-            if(field === 'Profile Picture'){
-                setter(data => {return {...data, picture: e.target.value}})
-            }
-            else if(field === 'Name'){
-                setter(data => {return {...data, name: e.target.value}})
-            }
-            else if(field === 'Email'){
-                setter(data => {return {...data, email: e.target.value}})
-            }
-            else{
-                setter(data => {return {...data, number: e.target.value}})
-            }
-        }}/>
-        <br/>
-    </div>
+    return <form>
+        <div className='form-floating'>
+            <input className="form-control" placeholder={name} onChange={e => {
+                if(field === 'Profile Picture'){
+                    setter(data => {return {...data, picture: e.target.value}})
+                }
+                else if(field === 'Name'){
+                    setter(data => {return {...data, name: e.target.value}})
+                }
+                else if(field === 'Email'){
+                    setter(data => {return {...data, email: e.target.value}})
+                }
+                else{
+                    setter(data => {return {...data, number: e.target.value}})
+                }
+            }}/>
+            <label className=''>{field}</label><br/>
+            <br/>
+        </div>
+    </form>
 }
