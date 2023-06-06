@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import { useDispatch } from 'react-redux';
 import { add } from '../../Store/listsSlice';
 import ReinputField from './AddProfileChilds/ReinputField';
+import Container from 'react-bootstrap/Container';
+import Button from 'react-bootstrap/Button';
 
 
 export default function AddProfile(){
@@ -10,7 +12,7 @@ export default function AddProfile(){
         name:'',
         email:'',
         number:''
-    });
+    }); 
 
     const dispatch = useDispatch();
     return <>
@@ -18,21 +20,17 @@ export default function AddProfile(){
         <br/>
         <br/>
         <br/>
-    <div>
+    <Container fluid="sm">
         <ReinputField field="Profile Picture" name="Image" setter={informationSetter}/>
-        <br/>
         <ReinputField field="Name" type="text" name="Name" setter={informationSetter}/>
-        <br/>
         <ReinputField field="Email" type="email" name="Eail" setter={informationSetter}/>
-        <br/>
         <ReinputField field="Phone Number" type="tel" name="Number" setter={informationSetter}/>
-        <br/>
-        <button onClick={()=>{
+        <Button variant="primary" onClick={()=>{
             dispatch(
                 add(information)
             )
-        }}>submit</button>
-    </div>
+        }}>Submit</Button>{' '}
+    </Container>
 
     </>
 }
