@@ -2,50 +2,60 @@ const Profiles = require('./Model')
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const multer = require('multer');
 const bodyParser = require('body-parser');
-const Grid = require('gridfs-stream');
-const {GridFsStorage} = require('multer-gridfs-storage');
 
 require('dotenv').config();
 
 app.use(bodyParser.json());
 
-// const con = mongoose.createConnection(process.env.MONGOOSE_URI, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-// })
+mongoose.connect(process.env.MONGOOSE_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    dbName: 'Profile'
+})
+.then(console.log('DB connected!'))
 
-// //Initalize GridFS
-// let gfs;
-// con.once('open', ()=>{
-//     console.log('DB connected!')
-//     gfs = Grid(con.db, mongoose.mongo);
-//     gfs.collection('uploads');
-// })
-
-// Create storage engine for Multer
-const storage = new GridFsStorage({
-    url: process.env.MONGOOSE_URI,
-    file: (req, file) => {
-      return {
-        filename: file.originalname
-      };
-    }
-  });
-const upload = multer({ storage });
-
+//uploaindg the datas
 app.post('/data', (req, res)=>{
     console.log(req.body);
-    // const image = req.file.filename;
-    
-    const newData = new Profiles(req.body);
-    newData.save().then(() => console.log('Data saved successfully!'))
-    .catch((err) => 
-    {console.log('Error saving data:', err)
+
+    const newData = new Profiles(req.body)  ;
+    newData.save()
+    .then(() => console.log('Data saved successfully!'))
+    .catch((err) =>   
+    {console.log('Error saving data:', err)``
     res.status(500).json({ error: err.message })});
+    
     res.redirect('/')
 })
+
+
+//retreiving the data
+app.get('/data', (req, res)=>{
+  const { filename } = req.params;
+
+    Profiles.find({}, (err, data)=>{
+      if (err) {
+        res.status(500).json({ error: err.message });
+      } else {
+        res.json(data);
+      }
+    });
+})
+
+
+//delete the data
+app.delete('/data', (req, res)=>{
+  
+})
+
+
+//edit the data
+app.put('/data', (req, res)=>{
+
+})
+
+
 
 app.listen(3000, ()=> {
     console.log('Server Started')})

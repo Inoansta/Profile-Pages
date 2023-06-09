@@ -8,6 +8,5 @@ phone: String,
 image: String
 })
 
-const Profiles = model('Profiles', profileSchema);
-
+const Profiles = model('Profiles', profileSchema)
 module.exports = Profiles; 
