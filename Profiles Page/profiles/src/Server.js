@@ -1,12 +1,11 @@
+const crypto = require('crypto')
 const path = require('path');
 const express = require('express');
 const app = express();
-const multer = require('multer');
-const Grid = require('gridfs-stream');
-const {GridFsStorage} = require('multer-gridfs-storage');
 const mongoose = require('mongoose');
+const multer = require('multer');
+const {GridFsStorage} = require('multer-gridfs-storage');
 const bodyParser = require('body-parser');
-const crypto = require('crypto')
 
 require('dotenv').config();
 app.use(bodyParser.urlencoded({
@@ -14,6 +13,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
+//connecting MongoDB
 const conn = mongoose.createConnection(process.env.MONGOOSE_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
@@ -21,8 +21,10 @@ const conn = mongoose.createConnection(process.env.MONGOOSE_URI, { useNewUrlPars
 let gfs;
 conn.once('open', () => {
   console.log('GridFS initialized!')
-  gfs = Grid(conn.db, mongoose.mongo);
-  gfs.collection('uploads');  
+  gfs =  new mongoose.mongo.GridFSBucket(conn.db, {
+    bucketName: "pures"
+  });  
+  
   
 });
 
@@ -35,13 +37,11 @@ const storage = new GridFsStorage({
         if (err) {
           return reject(err);
         }
-          
-          
 
         const filename = buf.toString('hex') + path.extname(file.originalname);
         const fileInfo = {
           filename: filename,
-          bucketName: 'uploads',
+          bucketnName: "pures",
           metadata:{
             name: req.body.name,
             email: req.body.email,
@@ -57,32 +57,32 @@ const upload = multer({ storage });
 
 
 //uploaindg the datas
-app.post('/data', upload.single('file'),(req, res)=>{    
+app.post('/data', upload.single("file"),(req, res)=>{    
     console.log('Sent successfully!')
     res.redirect('/')
 })
 
 
 //retreiving the datas
-app.get('/data', (req, res)=>{
-  gfs.collection('uploads').find().toArray((err, files) => {
-    // Check if files
-    if (!files || files.length === 0) {
-      res.render('index', { files: false });
-    } else {
-      files.map(file => {
-        if (
-          file.contentType === 'image/jpeg' ||
-          file.contentType === 'image/png'
-        ) {
-          file.isImage = true;
-        } else {
-          file.isImage = false;
-        }
-      });
-      res.render('index', { files: files });
-    }
+app.get('/data', async (req, res)=>{
+  gfs =  new mongoose.mongo.GridFSBucket(conn.db, {
+    bucketName: "pures"
   });
+  const cursor = gfs.find();
+  for await (const doc of cursor){
+    console.log(doc)
+  }
+  res.redirect("/")
+  // gfs.find().toArray((err, files) => {
+    
+  //   // Check if files
+  //   if (!files || files.length === 0) {
+  //     return res.status(404).json({
+  //       err: 'No file exists'
+  //     })
+  //   } 
+  //   return res.json(files);
+  // });
 })
 
 
@@ -103,3 +103,6 @@ app.put('/data', (req, res)=>{
 
 app.listen(3000, ()=> {
     console.log('Server Started')})
+
+
+module.export = app;
