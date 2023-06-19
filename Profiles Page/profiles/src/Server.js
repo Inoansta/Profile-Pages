@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 // const {GridFsStorage} = require('multer-gridfs-storage');
 const {createModel} = require('mongoose-gridfs');
-const { ObjectId } = require('mongodb');
+const {ObjectId} = require('mongodb');
 const { Readable } = require('stream');
 const bodyParser = require('body-parser');
 
@@ -121,8 +121,11 @@ app.delete('/data', (req, res)=>{
         message: "Invalid ID in URL parameter."
     });
 }
-// const id = new ObjectId(req.query.id)
-Attachment.unlink(req.query.id);
+
+console.log(req.query.id)
+let id = new ObjectId(req.query.id)
+console.log(typeof id);
+Attachment.deleteFile({_id: id});
 
 })  
 
