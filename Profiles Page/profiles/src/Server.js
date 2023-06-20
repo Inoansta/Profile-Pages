@@ -1,13 +1,14 @@
-const crypto = require('crypto')
-const path = require('path');
 const express = require('express');
 const app = express();
+const {Profile} = require('./Model')
 const mongoose = require('mongoose');
 const multer = require('multer');
+const upload = multer({dest: 'uploads/'})
+const {uploadFile} = require('./S3')
 // const {GridFsStorage} = require('multer-gridfs-storage');
-const {createModel} = require('mongoose-gridfs');
-const {ObjectId} = require('mongodb');
-const { Readable } = require('stream');
+// const {createModel} = require('mongoose-gridfs');
+// const {ObjectId} = require('mongodb');
+// const { Readable } = require('stream');
 const bodyParser = require('body-parser');
 
 require('dotenv').config();
@@ -16,17 +17,18 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-let Attachment
+mongoose.connect(process.env.MONGOOSE_URI).then(()=> console.log('DB connected!'))
+// let Attachment
 //connecting MongoDB
-const conn = mongoose.connect(process.env.MONGOOSE_URI, {
-  useNewUrlParser: true,
-}).then(()=> {
-  console.log("Connected to MongoDB");
-  // Allocate model into Attachment
-  Attachment = createModel();
-}).catch((error) => {
-  console.error(error);
-});
+// const conn = mongoose.connect(process.env.MONGOOSE_URI, {
+//   useNewUrlParser: true,
+// }).then(()=> {
+//   console.log("Connected to MongoDB");
+//   // Allocate model into Attachment
+//   Attachment = createModel();
+// }).catch((error) => {
+//   console.error(error);
+// });
 
 
 //Initialize GridFS
@@ -69,21 +71,35 @@ const conn = mongoose.connect(process.env.MONGOOSE_URI, {
 
 
 //uploaindg the datas
-app.post('/data', (req, res)=>{    
-  const storage = multer.memoryStorage()
-  const upload = multer({ storage: storage})
-  upload.single('file')(req, res, (err) => {
-    if (err) {
-        return res.status(400).json({ message: "Upload Request Validation Failed" });
-    } else if(!req.body.name) {
-        return res.status(400).json({ message: "No track name in request body" });
-    }
+app.post('/data', upload.single('file'),async (req, res)=>{   
+  const {name, email, number} = req.body 
+  const file = req.file
+  console.log(file)
+  const result = await uploadFile(file)
+  console.log(result)
+  const profile = new Profile({
+    name: name,
+    email: email,
+    number: number,
+    key: result.key
+  })
+  profile.save();
+  res.send('bb')
+  
+//   const storage = multer.memoryStorage()
+//   const upload = multer({ storage: storage})
+//   upload.single('file')(req, res, (err) => {
+//     if (err) {
+//         return res.status(400).json({ message: "Upload Request Validation Failed" });
+//     } else if(!req.body.name) {
+//         return res.status(400).json({ message: "No track name in request body" });
+//     }
 
-    const readStream = Readable.from(req.file.buffer);
-    const options = ({ filename: req.file.originalname, contenttype: "image/png", metadata:{name: req.body.name, email: req.body.email, phone: req.body.phone}});
-    Attachment.write(options, readStream)
-    res.redirect('/')
-});
+//     const readStream = Readable.from(req.file.buffer);
+//     const options = ({ filename: req.file.originalname, contenttype: "image/png", metadata:{name: req.body.name, email: req.body.email, phone: req.body.phone}});
+//     Attachment.write(options, readStream)
+//     res.redirect('/')
+// });
 });
 
 
@@ -116,16 +132,16 @@ app.get('/data', (req, res)=>{
 
 //delete the data by its _id
 app.delete('/data', (req, res)=>{
-  if(!req.query.id) {
-    return res.status(400).json({
-        message: "Invalid ID in URL parameter."
-    });
-}
+  // if(!req.query.id) {
+  //   return res.status(400).json({
+  //       message: "Invalid ID in URL parameter."
+  //   });
+// }
 
-console.log(req.query.id)
-let id = new ObjectId(req.query.id)
-console.log(typeof id);
-Attachment.deleteFile({_id: id});
+// console.log(req.query.id)
+// let id = new ObjectId(req.query.id)
+// console.log(typeof id);
+// Attachment.deleteFile({_id: id});
 
 })  
 
