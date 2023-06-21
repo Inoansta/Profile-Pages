@@ -24,4 +24,13 @@ function uploadFile(file){
 
     return s3.upload(uploadParams).promise();
 }
+
+function deleteFile(req){
+    const uploadParams = {
+        Bucket: bucketName,
+        Key: req.body.key
+    }
+    return s3.deleteObject(uploadParams).promise();
+}
 exports.uploadFile = uploadFile
+exports.deleteFile = deleteFile

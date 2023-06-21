@@ -1,10 +1,13 @@
 const express = require('express');
 const app = express();
+const fs = require('fs')
+const util = require('util')
+const unlinkFile = util.promisify(fs.unlink)
 const {Profile} = require('./Model')
 const mongoose = require('mongoose');
 const multer = require('multer');
 const upload = multer({dest: 'uploads/'})
-const {uploadFile} = require('./S3')
+const {uploadFile, deleteFile} = require('./S3')
 // const {GridFsStorage} = require('multer-gridfs-storage');
 // const {createModel} = require('mongoose-gridfs');
 // const {ObjectId} = require('mongodb');
@@ -74,9 +77,7 @@ mongoose.connect(process.env.MONGOOSE_URI).then(()=> console.log('DB connected!'
 app.post('/data', upload.single('file'),async (req, res)=>{   
   const {name, email, number} = req.body 
   const file = req.file
-  console.log(file)
   const result = await uploadFile(file)
-  console.log(result)
   const profile = new Profile({
     name: name,
     email: email,
@@ -105,6 +106,7 @@ app.post('/data', upload.single('file'),async (req, res)=>{
 
 //retreiving the datas
 app.get('/data', (req, res)=>{
+
   // gfs =  new mongoose.mongo.GridFSBucket(conn.db, {
   //   bucketName: "pures"
   // });
@@ -131,7 +133,11 @@ app.get('/data', (req, res)=>{
 
 
 //delete the data by its _id
-app.delete('/data', (req, res)=>{
+app.delete('/data', async (req, res)=>{
+  Profile.deleteOne({key: req.bodoy.key})
+  deleteFile(req);
+
+  res.send('bb')
   // if(!req.query.id) {
   //   return res.status(400).json({
   //       message: "Invalid ID in URL parameter."
