@@ -4,17 +4,14 @@ const profileSchema = new mongoose.Schema({
     email: {
         type:String, 
         required:true, 
-        unique:true
     },
     number:{
         type:String, 
         required:true, 
-        unique:true
     },
     name:{
         type:String, 
-        required:true, 
-        unique:true
+        required:true
     },
     key: {
         type:String, 
