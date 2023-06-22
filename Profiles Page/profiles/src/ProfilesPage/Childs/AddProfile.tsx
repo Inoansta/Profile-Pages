@@ -6,6 +6,7 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 
 
+
 export default function AddProfile(){
     const [information, informationSetter] = useState({
         picture:'',
@@ -16,7 +17,10 @@ export default function AddProfile(){
 
     const dispatch = useDispatch();
     return <>
-    <div>Add Profile</div>
+    <div className='register'>
+    <br/>
+    <div className='register-contents'>
+    <div className='text-black'><h1>REGISTER</h1></div>
         <br/>
         <br/>
         <br/>
@@ -30,7 +34,10 @@ export default function AddProfile(){
                 add(information)
             )
         }}>Submit</Button>{' '}
+        <br/>
+        <br/>
     </Container>
-
+    </div>  
+    </div>
     </>
 }

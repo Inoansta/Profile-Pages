@@ -6,9 +6,6 @@ export default function ProfilesPage(){
 
     return (
         <>
-        <div className='Profiles'>
-            Profiles
-        </div>
         <div className ="page">
             <div className='AddProfile'>
                 <AddProfile/>

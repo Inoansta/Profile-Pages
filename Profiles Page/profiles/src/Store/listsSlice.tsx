@@ -14,7 +14,7 @@ export interface ListState {
 const initialState: ListState = {
     value:[{
         picture: "https://www.ctvnews.ca/content/dam/ctvnews/en/images/2022/12/19/lionel-messi-1-6201143-1671478558748.jpg",
-        name:"Lionle Messi",
+        name:"Lionel Messi",
         email:"LMessi@barca.com",
         number:"1234567890"
     }]

@@ -1,3 +1,5 @@
+
+
 .App {
   text-align: center;
   height: 100vh;
@@ -41,7 +43,7 @@
 .page {
   display: flex;
   align-items: stretch;
-  height: 70%
+  height: 100%
 }
 
 .Profiles {
@@ -49,8 +51,10 @@
 }
 
 .AddProfile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 35%;
-  border-right: 0.5px solid black;
 }
 
 .ProfileList {
@@ -77,4 +81,32 @@
 
 .Card{
   border: 2px gray solid;
+}
+
+body{
+  background-image: url(./Background/backkground.jpg);
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.register{
+  vertical-align: center;
+  background-color: #8EDDE3;
+  border: black 1px;
+  height: 100%;
+  width: 80%;
+  display: flex;
+}
+
+.register-contents{
+  margin: auto; 
+  width: 80%;
+}
+
+.cardImage{
+  width: 100%;
+  height: 15vw;
+  object-fit: contain;
 }
