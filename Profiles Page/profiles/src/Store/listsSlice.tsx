@@ -17,6 +17,18 @@ const initialState: ListState = {
         name:"Lionel Messi",
         email:"LMessi@barca.com",
         number:"1234567890"
+    },
+    {
+        picture:"https://cdn.vox-cdn.com/thumbor/9z4uK9wPMaNyZ_8QIA9Lwo3TKo8=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/24642404/1488008190.jpg",
+        name:"Roberto Lewandowski",
+        email:"RLewa@barca.com",
+        number:"1234567890"
+    },
+    {
+        picture:"https://cdn-japantimes.com/wp-content/uploads/2022/10/np_file_187166.jpeg",
+        name:"Max Verstappen",
+        email:"MVerstappen@f1.com",
+        number:"1234567890"
     }]
 }
 
